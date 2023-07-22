@@ -4,6 +4,8 @@ import * as validate from '@midwayjs/validate';
 import * as info from '@midwayjs/info';
 import * as orm from '@midwayjs/typeorm';
 import * as crossDomain from '@midwayjs/cross-domain';
+import * as upload from '@midwayjs/upload';
+// import * as swagger from '@midwayjs/swagger';
 import { join } from 'path';
 // import { DefaultErrorFilter } from './filter/default.filter';
 // import { NotFoundFilter } from './filter/notfound.filter';
@@ -17,10 +19,16 @@ import { WeatherErrorFilter } from './filter/weather.filter';
     view,
     orm,
     crossDomain,
+    upload,
+    // {
+    //   component: swagger,
+    //   enabledEnvironment: ['local']
+    // },
     {
       component: info,
       enabledEnvironment: ['local'],
     },
+    // swagger
   ],
   importConfigs: [join(__dirname, './config')],
 })
