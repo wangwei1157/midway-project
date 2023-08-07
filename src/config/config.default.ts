@@ -12,6 +12,12 @@ export default {
   view: {
     defaultViewEngine: 'nunjucks',
   },
+  cos: {
+    client: {
+      SecretId: 'AKIDGOJ3bz83mL9mCZpz1veBTWMzOYTSHvMj',
+      SecretKey: 'JgqlTzIQMCsLG3f5OYeZLJ90hGgu0vdA',
+    },
+  },
   typeorm: {
     dataSource: {
       default: {

@@ -1,9 +1,11 @@
 import { Controller, Get, Inject, Post, Body, Files, Fields } from '@midwayjs/core';
-
+import { Context } from '@midwayjs/koa';
 import { PhotoService } from '../service/photo.service'
 
 @Controller('/')
 export class HomeController {
+  @Inject()
+  ctx: Context
 
   @Inject()
   photoService: PhotoService
@@ -16,7 +18,7 @@ export class HomeController {
   @Post('/savePhoto')
   async savePhoto(@Body() body: any): Promise<any> {
     console.log(body);
-    const result = await this.photoService.findPhotos();
+    const result = await this.photoService.savePhoto(body);
     console.log(result);
 
     return {
@@ -24,6 +26,31 @@ export class HomeController {
       data: result,
       msg: null
     };
+  }
+
+  @Get('/findPhoto')
+  async findPhoto(@Body() body: any): Promise<any> {
+    // function getImageBase64(blob) {
+    //   return new Promise((resolve, reject) => {
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(blob);
+    //     reader.onload = () => {
+    //       const base64 = reader.result;
+    //       resolve(base64);
+    //     }
+    //     reader.onerror = error => reject(error);
+    //   });
+    // }
+
+    const result = await this.photoService.findPhotos() as any;
+    // return {
+    //   success: true,
+    //   data: result,
+    //   msg: null
+    // }
+
+    const data = new Buffer(result, 'binary').toString('base64');
+    return data
   }
 
   @Post('/upload')
@@ -46,7 +73,12 @@ export class HomeController {
     ]
 
     */
-    console.log(files, fields,body);
+
+    const result = await this.photoService.savePhoto(files);
+    console.log(result);
+    console.log(this.ctx.files);
+
+    console.log(files, fields, body);
 
     return {
       files,

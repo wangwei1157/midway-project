@@ -1,10 +1,13 @@
-import { Provide } from '@midwayjs/core';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
+import { COSService } from '@midwayjs/cos';
 import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
 export class PhotoService {
+    @Inject()
+    cosService: COSService;
 
     @InjectEntityModel(Photo)
     photoModel: Repository<Photo>;
@@ -18,18 +21,36 @@ export class PhotoService {
         photo.filename = 'photo-with-bears.jpg';
         photo.views = 1;
         photo.isPublished = true;
+        try {
+            const res = await this.cosService.uploadFile({
+                Bucket: 'ww1157-1318984815',
+                Region: 'ap-guangzhou',
+                Key: body[0].filename,
+                FilePath: body[0].data
+            })
+            if (res.statusCode === 200) {
+                // save success
+                photo.filePath = res.Location
+                console.log(photo);
 
-        // save entity
-        const photoResult = await this.photoModel.save(photo);
+                const photoResult = await this.photoModel.save(photo);
+                console.log('photo id = ', photoResult.id);
+            }
+        } catch (error) {
 
-        // save success
-        console.log('photo id = ', photoResult.id);
+        }
+
+
     }
     // find
     async findPhotos() {
 
         // find All
-        let allPhotos = await this.photoModel.find({});
+        let allPhotos = await this.photoModel.find({
+            where: {
+                id: 8
+            }
+        });
         console.log("All photos from the db: ", allPhotos);
         return allPhotos
         // find first

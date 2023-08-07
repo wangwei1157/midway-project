@@ -21,4 +21,7 @@ export class Photo {
     @Column()
     isPublished: boolean;
 
+    @Column()
+    filePath: string
+
 }

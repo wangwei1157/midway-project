@@ -5,6 +5,7 @@ import * as info from '@midwayjs/info';
 import * as orm from '@midwayjs/typeorm';
 import * as crossDomain from '@midwayjs/cross-domain';
 import * as upload from '@midwayjs/upload';
+import * as cos from '@midwayjs/cos';
 // import * as swagger from '@midwayjs/swagger';
 import { join } from 'path';
 // import { DefaultErrorFilter } from './filter/default.filter';
@@ -20,6 +21,7 @@ import { WeatherErrorFilter } from './filter/weather.filter';
     orm,
     crossDomain,
     upload,
+    cos,
     // {
     //   component: swagger,
     //   enabledEnvironment: ['local']
