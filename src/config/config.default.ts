@@ -34,12 +34,12 @@ export default {
         logging: false,
 
         // 配置实体模型
-        entities: [Photo],
+        // entities: [Photo],
 
         // 或者扫描形式
-        // entities: [
-        //   '**/entity/*.entity{.ts,.js}'
-        // ]
+        entities: [
+          '**/entity/*.entity{.ts,.js}'
+        ]
       }
     }
   },
