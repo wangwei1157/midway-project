@@ -3,9 +3,10 @@ import { InjectEntityModel } from '@midwayjs/typeorm';
 import { COSService } from '@midwayjs/cos';
 import { Dish } from '../entity/dish.entity';
 import { Repository } from 'typeorm';
+import { DishDTO } from '../dto/dish';
 
 @Provide()
-export class PhotoService {
+export class DishService {
   @Inject()
   cosService: COSService;
 
@@ -13,29 +14,53 @@ export class PhotoService {
   dishModel: Repository<Dish>;
 
   // save
-  async saveDish(body: any) {
+  async saveDish(body: DishDTO) {
     let dish = new Dish();
-    dish.views = 1;
+    try {
+      dish.dishImg = body.dishImg;
+      dish.name = body.name
+      dish.views = body.views || 1;
+      dish.desc = body.desc;
+      const dishResult = await this.dishModel.save(dish);
+      console.log('dish id = ', dishResult.id);
+    } catch (error) { }
+  }
+
+  async uploadDish(file: any[]) {
     try {
       const res = await this.cosService.uploadFile({
         Bucket: 'ww1157-1318984815',
         Region: 'ap-guangzhou',
-        Key: body[0].filename,
-        FilePath: body[0].data,
+        Key: file[0].filename,
+        FilePath: file[0].data,
       });
       if (res.statusCode === 200) {
-        // save success
-        dish.dishImg = res.Location;
-        const dishResult = await this.dishModel.save(dish);
-        console.log('dish id = ', dishResult.id);
+        return res.Location
+      } else {
+        return res
       }
-    } catch (error) {}
+    } catch (error) {
+      return error
+    }
+  }
+  async hotDish() {
+    try {
+      let result = await this.dishModel.createQueryBuilder('dish').orderBy('dish.views', 'DESC').take(3).getMany();
+      // console.log('hot dish from the db: ', result);
+      return result;
+    } catch (error) {
+      return error
+    }
   }
   // find
-  async findDish() {
-    let allPhotos = await this.dishModel.find();
-    console.log('All photos from the db: ', allPhotos);
-    return allPhotos;
+  async qryDish() {
+    try {
+      let allDish = await this.dishModel.find();
+      console.log('All dish from the db: ', allDish);
+      return allDish;
+    } catch (error) {
+      return error
+    }
     // find first
     // let firstPhoto = await this.dishModel.findOne({
     //     where: {

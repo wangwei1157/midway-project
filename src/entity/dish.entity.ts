@@ -9,7 +9,7 @@ export class Dish {
   name: string;
 
   @Column('text')
-  description: string;
+  desc: string;
 
   @Column('double')
   views: number;

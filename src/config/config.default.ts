@@ -1,8 +1,8 @@
 import { MidwayConfig } from '@midwayjs/core';
 import { uploadWhiteList } from '@midwayjs/upload';
+import { EverythingSubscriber } from '../event/subscriber';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { Photo } from '../entity/photo.entity';
 export default {
   // use for cookie sign key, should change to your own and keep security
   keys: '1688098078042_8299',
@@ -32,7 +32,7 @@ export default {
         database: 'ww_test',
         synchronize: false,     // 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
         logging: false,
-
+        subscribers: [EverythingSubscriber],
         // 配置实体模型
         // entities: [Photo],
 
@@ -97,5 +97,15 @@ export default {
     base64: false,
     // 仅在匹配路径到 /api/upload 的时候去解析 body 中的文件信息
     match: /\/upload/,
+  },
+  i18n: {
+    // 把你的翻译文本放到这里
+    localeTable: {
+      zh_CN: {
+        validate: {
+          'string.max': 'hello world',
+        },
+      },
+    },
   },
 } as MidwayConfig;
