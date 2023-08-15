@@ -1,5 +1,5 @@
 import { MidwayConfig } from '@midwayjs/core';
-import { uploadWhiteList } from '@midwayjs/upload';
+// import { uploadWhiteList } from '@midwayjs/upload';
 import { EverythingSubscriber } from '../event/subscriber';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -12,10 +12,36 @@ export default {
   view: {
     defaultViewEngine: 'nunjucks',
   },
+  jwt: {
+    secret: 'setscrew',
+    expiresIn: 60 * 60 * 24,
+  },
+  app: {
+    security: {
+      prefix: ['/api', '/dish'],         // 指定已/api开头的接口地址需要拦截
+      ignore: ['/api/login', '/api/user/create'], // 指定该接口地址，不需要拦截
+    },
+  },
+  redis: {
+    client: {
+      host: '119.91.208.237',
+      port: 6379,
+      password: 'ww1157606081',
+      db: 0,
+    },
+  },
   cos: {
     client: {
       SecretId: 'AKIDGOJ3bz83mL9mCZpz1veBTWMzOYTSHvMj',
       SecretKey: 'JgqlTzIQMCsLG3f5OYeZLJ90hGgu0vdA',
+    },
+  },
+  // swagger配置
+  swagger: {
+    title: 'midway-boot',
+    description: 'Midway脚手架',
+    auth: {
+      authType: 'bearer',
     },
   },
   typeorm: {
@@ -74,7 +100,8 @@ export default {
     // fileSize: string, 最大上传文件大小，默认为 10mb
     fileSize: '10mb',
     // whitelist: string[]，文件扩展名白名单
-    whitelist: uploadWhiteList.filter(ext => ext !== '.pdf'),
+    whitelist: null,
+    // uploadWhiteList.filter(ext => ext !== '.pdf'),
     // 仅允许下面这些文件类型可以上传
     // 您也可以使用 @midwayjs/upload 组件提供的 DefaultUploadFileMimeType 变量，
     // 作为默认的 MIME 校验规则，它提供了常用的 .jpg、.png、.psd 等文件扩展名的 MIME 数据

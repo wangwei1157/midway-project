@@ -1,8 +1,11 @@
-import { Controller, Get, Inject, Post, Body, Files, Fields } from '@midwayjs/core';
+import { Controller, Get, Inject, Post, Body, Files } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { DishService } from '../service/dish.service'
 import { DishDTO } from '../dto/dish';
+import { UploadDTO } from '../api/dto/CommonDTO'
+import { ApiBearerAuth, ApiBody, BodyContentType } from '@midwayjs/swagger';
 
+@ApiBearerAuth()
 @Controller('/dish')
 export class HomeController {
   @Inject()
@@ -71,8 +74,12 @@ export class HomeController {
     }
   }
 
-  @Post('/upload')
-  async upload(@Body() body, @Files() files, @Fields() fields) {
+
+  @Post('/upload', { summary: '图片上传' })
+  @ApiBody({
+    contentType: BodyContentType.Multipart
+  })
+  async upload(@Body() body: any, @Files() files: UploadDTO) {
     /*
     files = [
       {
@@ -90,6 +97,11 @@ export class HomeController {
       // ...file 下支持同时上传多个文件
     ]
     */
+
+    console.log(body);
+    console.log(files);
+
+
     let result
     try {
       result = await this.dishService.uploadDish(files);
@@ -99,6 +111,8 @@ export class HomeController {
         msg: '上传成功'
       }
     } catch (error) {
+      console.log(error);
+
       return {
         success: false,
         data: error,

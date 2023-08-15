@@ -4,6 +4,7 @@ import { COSService } from '@midwayjs/cos';
 import { Dish } from '../entity/dish.entity';
 import { Repository } from 'typeorm';
 import { DishDTO } from '../dto/dish';
+import { UploadDTO } from '../api/dto/CommonDTO';
 
 @Provide()
 export class DishService {
@@ -26,7 +27,9 @@ export class DishService {
     } catch (error) { }
   }
 
-  async uploadDish(file: any[]) {
+  async uploadDish(file: UploadDTO) {
+    console.log(file);
+
     try {
       const res = await this.cosService.uploadFile({
         Bucket: 'ww1157-1318984815',

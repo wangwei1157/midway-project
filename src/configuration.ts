@@ -7,12 +7,15 @@ import * as crossDomain from '@midwayjs/cross-domain';
 import * as upload from '@midwayjs/upload';
 import * as cos from '@midwayjs/cos';
 import * as i18n from '@midwayjs/i18n';
-// import * as swagger from '@midwayjs/swagger';
+import * as jwt from '@midwayjs/jwt';
+import * as redis from '@midwayjs/redis';
+import * as swagger from '@midwayjs/swagger';
 import { join } from 'path';
 import { DefaultErrorFilter } from './filter/default.filter';
 import { NotFoundFilter } from './filter/notfound.filter';
 import { ValidateErrorFilter } from './filter/validate.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
+import { SecurityMiddleware } from './middleware/security.middleware';
 import * as view from '@midwayjs/view-nunjucks';
 // import { WeatherErrorFilter } from './filter/weather.filter';
 @Configuration({
@@ -25,6 +28,9 @@ import * as view from '@midwayjs/view-nunjucks';
     upload,
     cos,
     i18n,
+    jwt,
+    redis,
+    swagger,
     // {
     //   component: swagger,
     //   enabledEnvironment: ['local']
@@ -43,7 +49,7 @@ export class ContainerLifeCycle {
 
   async onReady() {
     // add middleware
-    this.app.useMiddleware([ReportMiddleware]);
+    this.app.useMiddleware([SecurityMiddleware, ReportMiddleware]);
     // this.app.useFilter([ValidateErrorFilter]);
     // add filter
     this.app.useFilter([NotFoundFilter, DefaultErrorFilter, ValidateErrorFilter]);

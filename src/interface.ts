@@ -1,6 +1,9 @@
 /**
  * @description User-Service parameters
  */
+import '@midwayjs/core';
+import { UserContext } from './common/UserContext';
+
 export interface IUserOptions {
   uid: number;
 }
@@ -20,4 +23,10 @@ export interface WeatherInfo {
     isRadar: string;
     Radar: string;
   };
+
+}
+declare module '@midwayjs/core' {
+  interface Context {
+    userContext: UserContext;
+  }
 }
