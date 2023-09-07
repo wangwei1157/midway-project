@@ -42,7 +42,7 @@ export class CommonController {
   @ApiResponse({ type: LoginVO })
   @ApiBearerAuth()
   @Validate()
-  @Post('/login', { description: '登陆' })
+  @Post('/login', { description: '登录' })
   async login(@Body() body: LoginDTO): Promise<LoginVO> {
     const user = await this.userService.findByUsername(body.username)
     console.log('47');
